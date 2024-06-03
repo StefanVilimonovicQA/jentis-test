@@ -2,6 +2,7 @@ Cypress.Commands.add('addUser', (firstName, lastName, email, password) => {
     cy.request({
         method: 'POST',
         url: 'https://thinking-tester-contact-list.herokuapp.com/users',
+        failOnStatusCode: false,
         body: {
           firstName: firstName,
           lastName: lastName,
@@ -9,7 +10,7 @@ Cypress.Commands.add('addUser', (firstName, lastName, email, password) => {
           password: password,
         },
       }).then((response) => {
-        return response.body
+        return response
       })
 })
 Cypress.Commands.add('deleteUser', (token) => {
