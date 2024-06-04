@@ -2,15 +2,16 @@ import { createRandomUser } from '../../../fixtures/createUser';
 import { faker } from '@faker-js/faker';
 
 describe('Contacts API tests', () => {
+  let token
     it('Delete user', () => {
         const user = createRandomUser()
         cy.addUser(user.firstName, user.lastName, user.email, user.password).then((response) => {
-            console.log(response)
+          token = response.body.token
             cy.request({
                 method: 'DELETE',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+                url: '/users/me',
                 auth: {
-                    bearer: response.body.token
+                    bearer: token
                   }
               }).then((result) => {
                 expect(result.status).to.eq(200);
@@ -21,7 +22,7 @@ describe('Contacts API tests', () => {
     it('Delete user with empty authorization token', () => {
             cy.request({
                 method: 'DELETE',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+                url: `/users/me`,
                 failOnStatusCode: false,
                 auth: {
                     bearer: ""
@@ -36,7 +37,7 @@ describe('Contacts API tests', () => {
     it('Delete user with invalid authorization token', () => {
         cy.request({
             method: 'DELETE',
-            url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+            url: '/users/me',
             failOnStatusCode: false,
             auth: {
                 bearer: faker.string.uuid()

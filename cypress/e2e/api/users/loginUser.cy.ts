@@ -7,10 +7,10 @@ describe('Contacts API tests', () => {
   it('Log in user', () => {
     cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
       (response) => {
-        token = response.token;
+        token = response.body.token;
         cy.request({
           method: 'POST',
-          url: 'https://thinking-tester-contact-list.herokuapp.com/users/login',
+          url: '/users/login',
           body: {
             email: response.body.user.email,
             password: user.password,
@@ -35,7 +35,7 @@ describe('Contacts API tests', () => {
     delete mutatedUser[missingProperty];
     cy.request({
       method: 'POST',
-      url: 'https://thinking-tester-contact-list.herokuapp.com/users/login',
+      url: '/users/login',
       failOnStatusCode: false,
       body: {
         email: mutatedUser.email,
@@ -56,7 +56,7 @@ describe('Contacts API tests', () => {
         invParams.forEach((param) => {
             cy.request({
                 method: 'POST',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/login',
+                url: '/users/login',
                 failOnStatusCode: false,
                 body: {
                   email: param.email,
@@ -68,10 +68,11 @@ describe('Contacts API tests', () => {
         })
         
       })
+      after(() => {
+        cy.deleteUser(token)
+    })
     
   });
 
-  // after(() => {
-  //     cy.deleteUser(token)
-  // })
+ 
 

@@ -9,7 +9,7 @@ describe('Contacts API tests', () => {
             token = response.body.token;
             cy.request({
                 method: 'GET',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+                url: '/users/me',
                 auth: {
                     bearer: token
                   }
@@ -25,7 +25,7 @@ describe('Contacts API tests', () => {
     it('Get user profile with empty authorization token', () => {
         cy.request({
             method: 'GET',
-            url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+            url: '/users/me',
             failOnStatusCode: false,
             auth: {
                 bearer: ""
@@ -39,7 +39,7 @@ describe('Contacts API tests', () => {
     it('Get user profile with invalid authorization token', () => {
         cy.request({
             method: 'GET',
-            url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+            url: '/users/me',
             failOnStatusCode: false,
             auth: {
                 bearer: faker.string.uuid()

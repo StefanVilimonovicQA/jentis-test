@@ -10,7 +10,7 @@ describe('Contacts API tests', () => {
             token = response.body.token
             cy.request({
                 method: 'POST',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/logout',
+                url: '/users/logout',
                 auth: {
                     bearer: token
                   }
@@ -23,7 +23,7 @@ describe('Contacts API tests', () => {
     it('Log out user with empty authorization token', () => {
             cy.request({
                 method: 'POST',
-                url: 'https://thinking-tester-contact-list.herokuapp.com/users/logout',
+                url: '/users/logout',
                 failOnStatusCode: false,
                 auth: {
                     bearer: ""
@@ -38,7 +38,7 @@ describe('Contacts API tests', () => {
     it('Log out user with invalid authorization token', () => {
         cy.request({
             method: 'POST',
-            url: 'https://thinking-tester-contact-list.herokuapp.com/users/logout',
+            url: '/users/logout',
             failOnStatusCode: false,
             auth: {
                 bearer: faker.string.uuid()

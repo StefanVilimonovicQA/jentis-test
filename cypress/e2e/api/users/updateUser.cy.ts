@@ -14,7 +14,7 @@ describe('Contacts API tests', () => {
       token = response.body.token;
       cy.request({
         method: 'PATCH',
-        url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+        url: '/users/me',
         auth: {
           bearer: token,
         },
@@ -42,7 +42,7 @@ describe('Contacts API tests', () => {
 
     cy.request({
       method: 'PATCH',
-      url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+      url: '/users/me',
       auth: {
         bearer: token,
       },
@@ -69,7 +69,7 @@ describe('Contacts API tests', () => {
       requestBody[property] = '';
       cy.request({
         method: 'PATCH',
-        url: 'https://thinking-tester-contact-list.herokuapp.com/users/me',
+        url: '/users/me',
         failOnStatusCode: false,
         auth: {
           bearer: token,
