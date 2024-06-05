@@ -37,7 +37,7 @@ describe('Users API tests', () => {
     const mutatedUser = { ...user };
     delete mutatedUser[missingProperty];
 
-    cy.log(`Missing property: ${missingProperty}`)
+    cy.log(`Missing property: ${missingProperty}`);
 
     cy.updateUser(
       token,
@@ -60,7 +60,13 @@ describe('Users API tests', () => {
     properties.forEach((property) => {
       const requestBody = { ...body };
       requestBody[property] = '';
-      cy.updateUser(token, requestBody.firstName, requestBody.lastName, requestBody.email, requestBody.password).then((response) => {
+      cy.updateUser(
+        token,
+        requestBody.firstName,
+        requestBody.lastName,
+        requestBody.email,
+        requestBody.password
+      ).then((response) => {
         expect(response.status).to.eq(400);
         expect(response.body.message).to.include(
           `User validation failed: ${property}:`

@@ -13,11 +13,9 @@ describe('Users API tests', () => {
   });
 
   it('Log out user', () => {
-    
-        cy.logoutUser(token).then((result) => {
-          expect(result.status).to.eq(200);
-        });
-     
+    cy.logoutUser(token).then((result) => {
+      expect(result.status).to.eq(200);
+    });
   });
   it('Log out user with empty authorization token', () => {
     cy.logoutUser('').then((result) => {
