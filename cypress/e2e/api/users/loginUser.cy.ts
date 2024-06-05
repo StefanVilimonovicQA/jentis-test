@@ -1,30 +1,23 @@
 import { createRandomUser } from '../../../fixtures/createUser';
 import { faker } from '@faker-js/faker';
 
-describe('Contacts API tests', () => {
+describe('Users API tests', () => {
   let token;
   const user = createRandomUser();
-  it('Log in user', () => {
+  before(() => {
     cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
       (response) => {
         token = response.body.token;
-        cy.request({
-          method: 'POST',
-          url: '/users/login',
-          body: {
-            email: response.body.user.email,
-            password: user.password,
-          },
-        }).then((result) => {
-          expect(result.status).to.eq(200);
-          expect(result.body.user.firstName).to.eq(
-            response.body.user.firstName
-          );
-          expect(result.body.user.lastName).to.eq(response.body.user.lastName);
-          expect(result.body.user.email).to.eq(response.body.user.email);
-        });
       }
     );
+  });
+  it('Log in user', () => {
+    cy.loginUser(user.email, user.password).then((result) => {
+      expect(result.status).to.eq(200);
+      expect(result.body.user.firstName).to.eq(user.firstName);
+      expect(result.body.user.lastName).to.eq(user.lastName);
+      expect(result.body.user.email).to.eq(user.email.toLowerCase());
+    });
   });
   it('Log in user with missing parameters', () => {
     const properties = ['email', 'password'];
@@ -33,15 +26,7 @@ describe('Contacts API tests', () => {
 
     const mutatedUser = { ...user };
     delete mutatedUser[missingProperty];
-    cy.request({
-      method: 'POST',
-      url: '/users/login',
-      failOnStatusCode: false,
-      body: {
-        email: mutatedUser.email,
-        password: mutatedUser.password,
-      },
-    }).then((result) => {
+    cy.loginUser(mutatedUser.email, mutatedUser.password).then((result) => {
       expect(result.status).to.eq(401);
     });
   });
@@ -52,27 +37,14 @@ describe('Contacts API tests', () => {
       { email: invEmail, password: user.password },
       { email: user.email, password: invPassword },
     ];
-   
-        invParams.forEach((param) => {
-            cy.request({
-                method: 'POST',
-                url: '/users/login',
-                failOnStatusCode: false,
-                body: {
-                  email: param.email,
-                  password: param.password,
-                },
-              }).then((result) => {
-                expect(result.status).to.eq(401)
-              })
-        })
-        
-      })
-      after(() => {
-        cy.deleteUser(token)
-    })
-    
+
+    invParams.forEach((param) => {
+      cy.loginUser(param.email, param.password).then((result) => {
+        expect(result.status).to.eq(401);
+      });
+    });
   });
-
- 
-
+  after(() => {
+    cy.deleteUser(token);
+  });
+});

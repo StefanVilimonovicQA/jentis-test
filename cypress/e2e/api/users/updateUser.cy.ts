@@ -1,35 +1,32 @@
 import { createRandomUser } from '../../../fixtures/createUser';
 
-describe('Contacts API tests', () => {
+describe('Users API tests', () => {
   let token;
-  const user1 = createRandomUser();
+  const user = createRandomUser();
   const user2 = createRandomUser();
+  before(() => {
+    cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
+      (response) => {
+        cy.loginUser(response.body.user.email, user.password).then(
+          (response1) => {
+            token = response.body.token;
+          }
+        );
+      }
+    );
+  });
   it('Update user', () => {
-    cy.addUser(
-      user1.firstName,
-      user1.lastName,
-      user1.email,
-      user1.password
-    ).then((response) => {
-      token = response.body.token;
-      cy.request({
-        method: 'PATCH',
-        url: '/users/me',
-        auth: {
-          bearer: token,
-        },
-        body: {
-          firstName: user2.firstName,
-          lastName: user2.lastName,
-          email: user2.email,
-          password: user2.password,
-        },
-      }).then((result) => {
-        expect(result.status).to.eq(200);
-        expect(result.body.firstName).to.not.eq(response.body.user.firstName);
-        expect(result.body.lastName).to.not.eq(response.body.user.lastName);
-        expect(result.body.email).to.not.eq(response.body.user.email);
-      });
+    cy.updateUser(
+      token,
+      user2.firstName,
+      user2.lastName,
+      user2.email,
+      user2.password
+    ).then((result) => {
+      expect(result.status).to.eq(200);
+      expect(result.body.firstName).to.not.eq(user.firstName);
+      expect(result.body.lastName).to.not.eq(user.lastName);
+      expect(result.body.email).to.not.eq(user.email);
     });
   });
   it('Update user with missing properties', () => {
@@ -37,45 +34,33 @@ describe('Contacts API tests', () => {
     const missingProperty =
       properties[Math.floor(Math.random() * properties.length)];
 
-    const mutatedUser = { ...user2 };
+    const mutatedUser = { ...user };
     delete mutatedUser[missingProperty];
 
-    cy.request({
-      method: 'PATCH',
-      url: '/users/me',
-      auth: {
-        bearer: token,
-      },
-      body: {
-        firstName: mutatedUser.firstName,
-        lastName: mutatedUser.lastName,
-        email: mutatedUser.email,
-        password: mutatedUser.password,
-      },
-    }).then((response) => {
+    cy.log(`Missing property: ${missingProperty}`)
+
+    cy.updateUser(
+      token,
+      mutatedUser.firstName,
+      mutatedUser.lastName,
+      mutatedUser.email,
+      mutatedUser.password
+    ).then((response) => {
       expect(response.status).to.eq(200);
     });
   });
   it('Update user with empty properties', () => {
     const body = {
-      firstName: user1.firstName,
-      lastName: user1.lastName,
-      email: user1.email,
-      password: user1.password,
+      firstName: user2.firstName,
+      lastName: user2.lastName,
+      email: user2.email,
+      password: user2.password,
     };
     const properties = Object.keys(body);
     properties.forEach((property) => {
       const requestBody = { ...body };
       requestBody[property] = '';
-      cy.request({
-        method: 'PATCH',
-        url: '/users/me',
-        failOnStatusCode: false,
-        auth: {
-          bearer: token,
-        },
-        body: requestBody,
-      }).then((response) => {
+      cy.updateUser(token, requestBody.firstName, requestBody.lastName, requestBody.email, requestBody.password).then((response) => {
         expect(response.status).to.eq(400);
         expect(response.body.message).to.include(
           `User validation failed: ${property}:`

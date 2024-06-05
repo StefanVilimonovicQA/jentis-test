@@ -1,11 +1,13 @@
 import { createRandomUser } from '../../../fixtures/createUser';
-describe('Contacts API tests', () => {
+describe('Users API tests', () => {
   let token;
-  const user = createRandomUser();
+  let user = createRandomUser();
+  let existingEmail;
   it('Add user', () => {
     cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
       (response) => {
         token = response.body.token;
+        existingEmail = response.body.user.email;
         expect(response.status).to.eq(201);
         expect(response.body.user).to.have.all.keys(
           '_id',
@@ -50,5 +52,19 @@ describe('Contacts API tests', () => {
         }
       );
     });
+  });
+  it('Add user with existing email', () => {
+    cy.addUser(
+      user.firstName,
+      user.lastName,
+      existingEmail,
+      user.password
+    ).then((response) => {
+      expect(response.status).to.eq(400);
+      expect(response.body.message).to.eq('Email address is already in use');
+    });
+  });
+  after(() => {
+    cy.deleteUser(token);
   });
 });
