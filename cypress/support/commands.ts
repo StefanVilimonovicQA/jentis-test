@@ -112,3 +112,13 @@ Cypress.Commands.add(
     });
   }
 );
+Cypress.Commands.add('getContactList', (token) => {
+  cy.request({
+    method: 'GET',
+    url: '/contacts',
+    failOnStatusCode: false,
+    auth: {
+      bearer: token,
+    },
+  });
+})

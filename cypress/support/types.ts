@@ -82,6 +82,11 @@ declare global {
         postalCode: string,
         country: string
       ): Chainable;
+      /**
+       * Get contact list.
+       * @param {string} token - User auth token.
+       */
+      getContactList(token: string): Chainable;
     }
   }
 }

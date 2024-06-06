@@ -1,19 +1,14 @@
-import { property } from 'cypress/types/lodash';
 import { createRandomUser } from '../../../fixtures/createUser';
 describe('Contacts API tests', () => {
   let token;
-  let result;
-  let result1;
   const user2 = createRandomUser();
   before(() => {
     const user = createRandomUser();
     cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
       (response) => {
-        result1 = response;
         cy.loginUser(response.body.user.email, user.password).then(
           (response1) => {
             token = response1.body.token;
-            result = response1;
           }
         );
       }
@@ -103,7 +98,7 @@ describe('Contacts API tests', () => {
       }
     );
   });
-  it.only('Add contact with empty properties', () => {
+  it('Add contact with empty properties', () => {
     const body = {
       firstName: user2.firstName,
       lastName: user2.lastName,
