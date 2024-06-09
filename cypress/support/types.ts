@@ -88,6 +88,37 @@ declare global {
        * @param {string} contactId - Contact id.
        */
       getContactList(token: string, contactId?: string): Chainable;
+       /**
+       * Update contact.
+       * @param {string} token - User auth token.
+       * @param {string} contactId - User Id.
+       * @param {string} firstName - User first name.
+       * @param {string} lastName - User last name.
+       * @param {string} birthdate - User birthdate.
+       * @param {string} email - User email.
+       * @param {string} phone - User phone number.
+       * @param {string} street1 - User first address.
+       * @param {string} street2 - User second address.
+       * @param {string} city - User city.
+       * @param {string} stateProvince - User province.
+       * @param {string} postalCode - User zip code.
+       * @param {string} country - User country.
+       */
+       updateContact(
+        token: string,
+        contactId: string,
+        firstName: string,
+        lastName: string,
+        birthdate: string,
+        email: string,
+        phone: string,
+        street1: string,
+        street2: string,
+        city: string,
+        stateProvince: string,
+        postalCode: string,
+        country: string
+      ): Chainable;
     }
   }
 }

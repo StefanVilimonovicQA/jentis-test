@@ -126,3 +126,44 @@ Cypress.Commands.add('getContactList', (token, contactId?) => {
     },
   });
 })
+
+Cypress.Commands.add(
+  'updateContact',
+  (
+    token,
+    contactId,
+    firstName,
+    lastName,
+    birthdate,
+    email,
+    phone,
+    street1,
+    street2,
+    city,
+    stateProvince,
+    postalCode,
+    country
+  ) => {
+    cy.request({
+      method: 'PUT',
+      url: `/contacts/${contactId}`,
+      failOnStatusCode: false,
+      auth: {
+        bearer: token,
+      },
+      body: {
+        firstName: firstName,
+        lastName: lastName,
+        birthdate: birthdate,
+        email: email,
+        phone: phone,
+        street1: street1,
+        street2: street2,
+        city: city,
+        stateProvince: stateProvince,
+        postalCode: postalCode,
+        country: country,
+      },
+    });
+  }
+);
