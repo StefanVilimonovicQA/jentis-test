@@ -167,3 +167,13 @@ Cypress.Commands.add(
     });
   }
 );
+Cypress.Commands.add('deleteContact', (token, contactId) => {
+  cy.request({
+    method: 'DELETE',
+    url: `/contacts/${contactId}`,
+    failOnStatusCode: false,
+    auth: {
+      bearer: token,
+    },
+  });
+});

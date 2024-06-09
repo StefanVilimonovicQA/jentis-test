@@ -119,6 +119,12 @@ declare global {
         postalCode: string,
         country: string
       ): Chainable;
+      /**
+       * Delete contact.
+       * @param {string} token - Token logged user.
+       * @param {string} contactId - Id of contact to be deleted.
+       */
+      deleteContact(token: string, contactId: string): Chainable;
     }
   }
 }

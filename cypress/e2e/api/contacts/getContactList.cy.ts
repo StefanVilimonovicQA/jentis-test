@@ -1,7 +1,7 @@
 import { createRandomUser } from '../../../fixtures/createUser';
 import { faker } from '@faker-js/faker';
 
-describe('Users API tests', () => {
+describe('Contacts API tests', () => {
   let token;
   const user = createRandomUser();
   before(() => {
@@ -15,7 +15,7 @@ describe('Users API tests', () => {
       }
     );
   });
-  it('Get contact list', () => {
+  beforeEach(() => {
     cy.addContact(
       token,
       user.firstName,
@@ -32,6 +32,9 @@ describe('Users API tests', () => {
     ).then((response) => {
       expect(response.status).to.eq(201);
     });
+  })
+  it('Get contact list', () => {
+  
     cy.getContactList(token).then((result) => {
       expect(result.status).to.eq(200);
       expect(result.body).to.be.an('array').and.not.be.empty;

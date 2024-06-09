@@ -1,7 +1,7 @@
 import { createRandomUser } from '../../../fixtures/createUser';
 import { faker } from '@faker-js/faker';
 
-describe('Users API tests', () => {
+describe('Contacts API tests', () => {
   let token;
   const user = createRandomUser();
   const contact = createRandomUser();
@@ -106,9 +106,7 @@ describe('Users API tests', () => {
     });
   });
   it('Update contact with empty properties', () => {
-    console.log(contactBody);
     const properties = Object.keys(contactBody);
-    console.log(properties);
     properties.forEach((property) => {
       const requestBody = { ...contactBody };
       requestBody[property] = '';
