@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 describe('Users API tests', () => {
   let token;
   const user = createRandomUser();
+  const contact = createRandomUser();
   before(() => {
     cy.addUser(user.firstName, user.lastName, user.email, user.password).then(
       (response) => {
@@ -15,38 +16,52 @@ describe('Users API tests', () => {
       }
     );
   });
-  it('Get contact list', () => {
+  it('Get contact', () => {
     cy.addContact(
       token,
-      user.firstName,
-      user.lastName,
-      user.birthdate,
-      user.email,
-      user.phone,
-      user.street1,
-      user.street2,
-      user.city,
-      user.stateProvince,
-      user.postalCode,
-      user.country
+      contact.firstName,
+      contact.lastName,
+      contact.birthdate,
+      contact.email,
+      contact.phone,
+      contact.street1,
+      contact.street2,
+      contact.city,
+      contact.stateProvince,
+      contact.postalCode,
+      contact.country
     ).then((response) => {
       expect(response.status).to.eq(201);
     });
     cy.getContactList(token).then((result) => {
       expect(result.status).to.eq(200);
       expect(result.body).to.be.an('array').and.not.be.empty;
+
+        cy.getContactList(token, result.body[0]._id)
     });
   });
-  it('Get contact list with empty authorization token', () => {
+  it('Get contact with empty authorization token', () => {
     cy.getContactList('').then((result) => {
       expect(result.status).to.eq(401);
       expect(result.body.error).to.eq('Please authenticate.');
     });
   });
-  it('Get contact list with invalid authorization token', () => {
+  it('Get contact with invalid authorization token', () => {
     cy.getContactList(faker.string.uuid()).then((result) => {
       expect(result.status).to.eq(401);
       expect(result.body.error).to.eq('Please authenticate.');
+    });
+  });
+  it('Get contact with empty contact Id', () => {
+    cy.getContactList(token, '').then((result) => {
+      expect(result.status).to.eq(200);
+      expect(result.body).to.be.an('array').and.not.be.empty;
+    });
+  });
+  it('Get contact with invalid contact Id', () => {
+    cy.getContactList(token, faker.string.uuid()).then((result) => {
+      expect(result.status).to.eq(400);
+      expect(result.body).to.eq('Invalid Contact ID');
     });
   });
   after(() => {

@@ -85,8 +85,9 @@ declare global {
       /**
        * Get contact list.
        * @param {string} token - User auth token.
+       * @param {string} contactId - Contact id.
        */
-      getContactList(token: string): Chainable;
+      getContactList(token: string, contactId?: string): Chainable;
     }
   }
 }
