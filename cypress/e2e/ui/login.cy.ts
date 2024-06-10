@@ -16,6 +16,7 @@ describe('Login UI tests', () => {
     cy.get('button#submit').click();
     cy.wait('@loginAPI');
     cy.get('h1').should('have.text', 'Contact List');
+    cy.url().should('include','/contactList')
   });
   it('Login with invalid credentials', () => {
     const invalidCredentials = [
