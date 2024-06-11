@@ -80,8 +80,6 @@ describe('Signup UI tests', () => {
         expect(xhr.response.statusCode).to.eq(400);
       });
 
-      //cy.get('span#error').should('contain', errorMessage.replace(/`/g, ''));
-
       cy.get('span#error')
         .invoke('text')
         .then((text) => {
