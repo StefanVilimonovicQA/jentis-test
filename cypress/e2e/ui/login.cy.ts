@@ -1,22 +1,19 @@
 import { faker } from '@faker-js/faker';
+import { loginPage } from '../../support/pageObjects/loginPage';
 describe('Login UI tests', () => {
-    const username = 'test@ui.com'
-    const password = 'test123'
+  const username = 'test@ui.com';
+  const password = 'test123';
   beforeEach(() => {
     cy.visit('/').get('h1').should('have.text', 'Contact List App');
     cy.intercept('/users/login').as('loginAPI');
   });
   it('Successful login', () => {
-    cy.get('#email')
-      .should('have.attr', 'placeholder', 'Email')
-      .type(username);
-    cy.get('#password')
-      .should('have.attr', 'placeholder', 'Password')
-      .type(password);
-    cy.get('button#submit').click();
+    loginPage.email(username);
+    loginPage.password(password);
+    loginPage.submit().click();
     cy.wait('@loginAPI');
     cy.get('h1').should('have.text', 'Contact List');
-    cy.url().should('include','/contactList')
+    cy.url().should('include', '/contactList');
   });
   it('Login with invalid credentials', () => {
     const invalidCredentials = [
@@ -26,16 +23,11 @@ describe('Login UI tests', () => {
     ];
 
     invalidCredentials.forEach((cred) => {
-        cy.log(`***Email value: ${cred.email}***`)
-        cy.log(`***Password value: ${cred.password}***`)
-      cy.get('#email').clear()
-        .should('have.attr', 'placeholder', 'Email')
-        .type(cred.email);
-      cy.get('#password').clear()
-        .should('have.attr', 'placeholder', 'Password')
-        .type(cred.password);
-      cy.get('button#submit').click();
-
+      cy.log(`***Email value: ${cred.email}***`);
+      cy.log(`***Password value: ${cred.password}***`);
+      loginPage.email(cred.email);
+      loginPage.password(cred.password);
+      loginPage.submit().click();
       cy.wait('@loginAPI').then((xhr) => {
         expect(xhr.response.statusCode).to.eq(401);
       });
@@ -47,30 +39,25 @@ describe('Login UI tests', () => {
   });
   it('Login with empty credentials', () => {
     const emptyCredentials = [
-        { email: ' ', password: ' ' },
-        { email: ' ', password: password },
-        { email: username, password: ' ' },
-      ];
-  
-      emptyCredentials.forEach((cred) => {
-        cy.log(`***Email value: ${cred.email}***`)
-        cy.log(`***Password value: ${cred.password}***`)
+      { email: ' ', password: ' ' },
+      { email: ' ', password: password },
+      { email: username, password: ' ' },
+    ];
 
-        cy.get('#email').clear()
-          .should('have.attr', 'placeholder', 'Email')
-          .type(cred.email);
-        cy.get('#password').clear()
-          .should('have.attr', 'placeholder', 'Password')
-          .type(cred.password);
-        cy.get('button#submit').click();
-  
-        cy.wait('@loginAPI').then((xhr) => {
-          expect(xhr.response.statusCode).to.eq(401);
-        });
-        cy.get('span#error')
-          .should('be.visible')
-          .and('exist')
-          .and('have.text', 'Incorrect username or password');
+    emptyCredentials.forEach((cred) => {
+      cy.log(`***Email value: ${cred.email}***`);
+      cy.log(`***Password value: ${cred.password}***`);
+
+      loginPage.email(cred.email);
+      loginPage.password(cred.password);
+      loginPage.submit().click();
+      cy.wait('@loginAPI').then((xhr) => {
+        expect(xhr.response.statusCode).to.eq(401);
       });
+      cy.get('span#error')
+        .should('be.visible')
+        .and('exist')
+        .and('have.text', 'Incorrect username or password');
+    });
   });
 });
