@@ -54,8 +54,8 @@ describe('Contacts API tests', () => {
     });
   });
   it('Delete already deleted contact', () => {
-    cy.deleteContact(token,contactID)
-    cy.deleteContact(token,contactID).then((result) => {
+    cy.deleteContact(token, contactID);
+    cy.deleteContact(token, contactID).then((result) => {
       expect(result.status).to.eq(404);
       expect(result.body).to.eq('');
     });

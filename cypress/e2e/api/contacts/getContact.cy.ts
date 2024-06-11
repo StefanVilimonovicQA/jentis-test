@@ -33,14 +33,16 @@ describe('Contacts API tests', () => {
     ).then((response) => {
       expect(response.status).to.eq(201);
     });
-  })
+  });
   it('Get contact', () => {
-    
     cy.getContactList(token).then((result) => {
       expect(result.status).to.eq(200);
       expect(result.body).to.be.an('array').and.not.be.empty;
 
-        cy.getContactList(token, result.body[0]._id)
+      cy.getContactList(token, result.body[0]._id).then((response) => {
+        expect(response.status).to.eq(200);
+        expect(response.body).to.not.be.empty;
+      });
     });
   });
   it('Get contact with empty authorization token', () => {

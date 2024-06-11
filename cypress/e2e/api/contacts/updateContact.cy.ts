@@ -23,7 +23,7 @@ describe('Contacts API tests', () => {
     cy.addContact(
       token,
       contact.firstName,
-      contact.lastName,  
+      contact.lastName,
       contact.birthdate,
       contact.email,
       contact.phone,

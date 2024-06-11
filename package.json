@@ -5,5 +5,9 @@
     "cypress-mochawesome-reporter": "^3.8.2",
     "prettier": "3.3.0",
     "typescript": "^5.4.5"
+  },
+  "scripts": {
+    "cypress:ui": "npx cypress open",
+    "cypress:headless": "npx cypress run"
   }
 }

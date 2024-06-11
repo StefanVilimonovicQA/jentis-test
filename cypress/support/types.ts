@@ -88,7 +88,7 @@ declare global {
        * @param {string} contactId - Contact id.
        */
       getContactList(token: string, contactId?: string): Chainable;
-       /**
+      /**
        * Update contact.
        * @param {string} token - User auth token.
        * @param {string} contactId - User Id.
@@ -104,7 +104,7 @@ declare global {
        * @param {string} postalCode - User zip code.
        * @param {string} country - User country.
        */
-       updateContact(
+      updateContact(
         token: string,
         contactId: string,
         firstName: string,

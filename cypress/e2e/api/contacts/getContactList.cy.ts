@@ -32,9 +32,8 @@ describe('Contacts API tests', () => {
     ).then((response) => {
       expect(response.status).to.eq(201);
     });
-  })
+  });
   it('Get contact list', () => {
-  
     cy.getContactList(token).then((result) => {
       expect(result.status).to.eq(200);
       expect(result.body).to.be.an('array').and.not.be.empty;

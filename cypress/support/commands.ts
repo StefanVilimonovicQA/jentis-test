@@ -125,7 +125,7 @@ Cypress.Commands.add('getContactList', (token, contactId?) => {
       bearer: token,
     },
   });
-})
+});
 
 Cypress.Commands.add(
   'updateContact',

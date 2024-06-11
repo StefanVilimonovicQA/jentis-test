@@ -11,7 +11,7 @@ describe('Signup UI tests', () => {
     cy.url().should('include', '/addUser');
     cy.get('h1').should('have.text', 'Add User');
   });
-  it('Cancel add user', () => {
+  it('Cancel signup user', () => {
     signupPage.cancelBtn().click();
     cy.url().should('include', '/login');
     cy.get('h1').should('have.text', 'Contact List App');
@@ -27,7 +27,7 @@ describe('Signup UI tests', () => {
     cy.url().should('include', '/contactList');
     cy.get('h1').should('have.text', 'Contact List');
   });
-  it('Add user validations', () => {
+  it('Signup user validations', () => {
     const credentials = [
       {
         firstName: `Frontend Testing user ${user.firstName}`,

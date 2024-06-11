@@ -14,7 +14,7 @@ describe('Helpers', () => {
       }
     });
     cy.getContactList(token).then((resp) => {
-        expect(resp.body).to.be.empty;
-    })
+      expect(resp.body).to.be.empty;
+    });
   });
 });
